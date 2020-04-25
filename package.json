@@ -1,0 +1,18 @@
+{
+  "name": "go-request",
+  "version": "1.0.0",
+  "description": "a basic request library.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "javescript",
+    "request"
+  ],
+  "author": "glj",
+  "license": "ISC"
+}
