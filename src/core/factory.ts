@@ -69,7 +69,7 @@ class Factory {
   }
 
   protected onError(err: Error): void {
-    console.log(err);
+    console.error(err);
   }
 }
 

@@ -1,4 +1,4 @@
-import { Context } from "./factory";
+import { Context } from './factory';
 
 // 洋葱模型执行中间件
 function compose(middlewares: Array<Function>, ctx: Context) {

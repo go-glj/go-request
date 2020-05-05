@@ -1,4 +1,4 @@
-import Request from "./src/request";
+import Request from './src/request';
 
 export { Request };
 

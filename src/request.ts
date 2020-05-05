@@ -1,4 +1,6 @@
-import Factory, { ReqCtx } from './core/factory';
+import Factory, { Context, ReqCtx } from './core/factory';
+
+export type Method = 'get' | 'post' | 'delete' | 'put' | 'patch' | 'head' | 'options' | 'rpc';
 
 export interface Options {
   [key: string]: any;
@@ -8,49 +10,29 @@ export interface FirstOptions extends Options {
   url: string;
 }
 
-const defaultOptions = {
-  cache: 'no-cache',
-};
+export type RequestMethod = (parameter: string | FirstOptions, options?: Options) => Context;
 
 class Request extends Factory {
+  get?: RequestMethod;
+  post?: RequestMethod;
+  delete?: RequestMethod;
+  put?: RequestMethod;
+  patch?: RequestMethod;
+  head?: RequestMethod;
+  options?: RequestMethod;
+  rpc?: RequestMethod;
   constructor() {
     super();
+    const methods: Array<Method> = ['get', 'post', 'delete', 'put', 'patch', 'head', 'options', 'rpc'];
+    methods.forEach(method => {
+      this[method] = (parameter: string | FirstOptions, options: Options = {}) => {
+        return this.processing(parameter, { ...options, method: method.toUpperCase() });
+      };
+    });
   }
 
   cancel() {
     console.log('cancel');
-  }
-
-  get(parameter: string | FirstOptions, options: Options = defaultOptions) {
-    return this.processing(parameter, { ...options, method: 'GET' });
-  }
-
-  post(parameter: string | FirstOptions, options: Options = defaultOptions) {
-    return this.processing(parameter, { ...options, method: 'POST' });
-  }
-
-  delete(parameter: string | FirstOptions, options: Options = defaultOptions) {
-    return this.processing(parameter, { ...options, method: 'DELETE' });
-  }
-
-  put(parameter: string | FirstOptions, options: Options = defaultOptions) {
-    return this.processing(parameter, { ...options, method: 'PUT' });
-  }
-
-  patch(parameter: string | FirstOptions, options: Options = defaultOptions) {
-    return this.processing(parameter, { ...options, method: 'PATCH' });
-  }
-
-  head(parameter: string | FirstOptions, options: Options = defaultOptions) {
-    return this.processing(parameter, { ...options, method: 'HEAD' });
-  }
-
-  options(parameter: string | FirstOptions, options: Options = defaultOptions) {
-    return this.processing(parameter, { ...options, method: 'OPTIONS' });
-  }
-
-  rpc(parameter: string | FirstOptions, options: Options = defaultOptions) {
-    return this.processing(parameter, { ...options, method: 'RPC' });
   }
 
   private processing(parameter: string | FirstOptions, options: Options) {
@@ -76,6 +58,7 @@ class Request extends Factory {
 
     ctx.res = res;
     await this.run(ctx, 'res');
+    return ctx;
   }
 }
 
